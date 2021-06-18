@@ -1,8 +1,10 @@
+import Layout from '../../components/Layout'
+
 function soulClub() {
   return (
-    <div>
+    <Layout>
       <h1>Soul Club</h1>
-    </div>
+    </Layout>
   )
 }
 

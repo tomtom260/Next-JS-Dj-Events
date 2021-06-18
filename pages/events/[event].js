@@ -1,8 +1,9 @@
+import Layout from '../../components/Layout'
 function event() {
   return (
-    <div>
+    <Layout>
       <h1>Random Event</h1>
-    </div>
+    </Layout>
   )
 }
 
