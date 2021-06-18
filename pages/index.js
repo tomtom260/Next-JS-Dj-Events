@@ -1,8 +1,12 @@
+import Layout from '../components/Layout'
+
 function homePage() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <Layout>
+      <div>
+        <h1>Home</h1>
+      </div>
+    </Layout>
   )
 }
 

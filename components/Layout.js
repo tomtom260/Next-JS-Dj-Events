@@ -1,5 +1,5 @@
-import { keyword } from 'color-convert'
 import Head from 'next/head'
+import styles from '../styles/Layout.module.css'
 
 function Layout({ title, description, keywords, children }) {
   return (
@@ -9,7 +9,7 @@ function Layout({ title, description, keywords, children }) {
         <meta name='description' content={description} />
         <meta name='keywords' content={keywords}></meta>
       </Head>
-      {children}
+      <div className={styles.container}>{children}</div>
     </div>
   )
 }
