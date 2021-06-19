@@ -3,21 +3,13 @@ import Link from 'next/link'
 import Layout from '@/components/Layout'
 
 function EventsPage({ events }) {
-  console.log(events)
   return (
     <Layout>
       <h1>Upcoming Events</h1>
       {events.length === 0 ? (
         <h3>No Upcoming Events</h3>
       ) : (
-        <>
-          {events.map(evt => (
-            <EventItem key={evt.id} evt={evt} />
-          ))}
-          <Link href='/events'>
-            <a className='btn-secondary'>View More</a>
-          </Link>
-        </>
+        events.map(evt => <EventItem key={evt.id} evt={evt} />)
       )}
     </Layout>
   )

@@ -2,7 +2,6 @@
 import events from './data.json'
 
 export default (req, res) => {
-  console.log(req)
   if (req.method === 'GET') {
     const { 0: event } = events.filter(evt => {
       return evt.slug === req.query.slug
