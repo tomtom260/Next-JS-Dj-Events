@@ -4,7 +4,6 @@ import EventItem from '@/components/EventItem'
 import Layout from '@/components/Layout'
 import { API_URL } from '@/config/index'
 import qs from 'qs'
-import { query } from 'esquery'
 
 function SearchPage({ events }) {
   const router = useRouter()
