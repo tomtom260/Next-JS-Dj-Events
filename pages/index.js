@@ -25,7 +25,7 @@ function homePage({ events }) {
 
 export default homePage
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const events = await (
     await fetch(`${API_URL}/events?_sort=date:ASC&_limit=3`)
   ).json()
