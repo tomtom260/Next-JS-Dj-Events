@@ -1,13 +1,16 @@
 import React, { useReducer } from 'react'
 import styles from '@/styles/form.module.css'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import Layout from '@/components/Layout'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { API_URL } from '../config'
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case action.type: {
-      return { ...state, [action.type]: action.payload }
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case type: {
+      return { ...state, [type]: payload }
     }
   }
 }
@@ -25,8 +28,32 @@ const initialState = {
 const handleChange = (e, dispatch) => {
   dispatch({ type: e.target.name, payload: e.target.value })
 }
-const handleSubmit = event => {
-  console.log(event)
+const handleSubmit = async (event, router) => {
+  let hasEmptyField = false
+  Object.keys(event).forEach(arg => {
+    if (event[arg] === '') {
+      toast.error(`${arg} field is empty!`)
+      hasEmptyField = true
+    }
+  })
+
+  if (hasEmptyField) return
+
+  const res = await fetch(`${API_URL}/events`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(event),
+  })
+
+  if (!res.ok) {
+    toast.error('Something Went Wrong')
+    return
+  }
+
+  const evt = await res.json()
+  router.push(`/events/${evt.slug}`)
 }
 
 function Add() {
@@ -35,13 +62,13 @@ function Add() {
   return (
     <Layout title='Add New Event'>
       <Link href='/events'>Go Back</Link>
+      <ToastContainer hideProgressBar />
       <h1>Add Event</h1>
-
       <form
         className={styles.form}
         onSubmit={e => {
           e.preventDefault()
-          handleSubmit(state)
+          handleSubmit(state, router)
         }}
       >
         <div className={styles.grid}>
