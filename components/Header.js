@@ -8,12 +8,17 @@ function Header() {
       <div className={styles.logo}>
         <Link href='/'>DJ Events</Link>
       </div>
-      <Search/>
+      <Search />
       <nav>
         <ul>
           <li>
             <Link href='/events'>
               <a>Events</a>
+            </Link>
+          </li>
+          <li>
+            <Link href='/add'>
+              <a>Add Events</a>
             </Link>
           </li>
         </ul>

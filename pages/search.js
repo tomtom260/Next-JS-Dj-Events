@@ -8,7 +8,7 @@ import qs from 'qs'
 function SearchPage({ events }) {
   const router = useRouter()
   return (
-    <Layout>
+    <Layout title='Search Results'>
       <Link href='/events'>Go back</Link>
       <h1>{`Search Results for ${router.query.term}`}</h1>
       {events.length === 0 ? (
