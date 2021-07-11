@@ -3,6 +3,7 @@ import styles from '@/styles/Event.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaPencilAlt, FaTimes } from 'react-icons/fa'
+import { API_URL } from '@/config/index'
 
 const deleteEvent = e => {
   console.log('delete event')
@@ -28,7 +29,12 @@ function Event({ evt }) {
         <h1>{evt?.name}</h1>
         {evt.image && (
           <div className={styles.image}>
-            <Image alt='event image' src={evt.image} width={960} height={600} />
+            <Image
+              alt='event image'
+              src={evt.image.formats.medium.url}
+              width={960}
+              height={600}
+            />
           </div>
         )}
 
@@ -52,9 +58,7 @@ function Event({ evt }) {
 export default Event
 
 export async function getStaticPaths() {
-  const paths = (
-    await (await fetch('http://localhost:3000/api/events')).json()
-  ).map(evt => ({
+  const paths = (await (await fetch(`${API_URL}/events`)).json()).map(evt => ({
     params: { slug: evt.slug },
   }))
   return {
@@ -64,8 +68,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: { slug } }) {
-  const evt = await (
-    await fetch(`http://localhost:3000/api/events/${slug}`)
+  const { 0: evt } = await (
+    await fetch(`${API_URL}/events?slug=${slug}`)
   ).json()
   return {
     props: {

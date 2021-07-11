@@ -1,6 +1,7 @@
 import EventItem from '@/components/EventItem'
 import Link from 'next/link'
 import Layout from '@/components/Layout'
+import { API_URL } from '@/config/index'
 
 function homePage({ events }) {
   return (
@@ -25,9 +26,9 @@ function homePage({ events }) {
 export default homePage
 
 export async function getServerSideProps() {
-  const events = (
-    await (await fetch('http://localhost:3000/api/events')).json()
-  ).slice(0, 3)
+  const events = await (
+    await fetch(`${API_URL}/events?_sort=date:ASC&_limit=3`)
+  ).json()
   return {
     props: {
       events,
