@@ -1,11 +1,13 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import styles from '@/styles/form.module.css'
 import Link from 'next/link'
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import Layout from '@/components/Layout'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { API_URL } from '../config'
+import { API_URL } from '@/config/index'
+import Image from 'next/image'
+import { FaImage } from 'react-icons/fa'
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -15,20 +17,14 @@ const reducer = (state, { type, payload }) => {
   }
 }
 
-const initialState = {
-  name: '',
-  performers: '',
-  venue: '',
-  address: '',
-  date: '',
-  time: '',
-  description: '',
-}
-
 const handleChange = (e, dispatch) => {
   dispatch({ type: e.target.name, payload: e.target.value })
 }
 const handleSubmit = async (event, router) => {
+  const {
+    query: { id },
+  } = router
+
   let hasEmptyField = false
   Object.keys(event).forEach(arg => {
     if (event[arg] === '') {
@@ -39,8 +35,8 @@ const handleSubmit = async (event, router) => {
 
   if (hasEmptyField) return
 
-  const res = await fetch(`${API_URL}/events`, {
-    method: 'POST',
+  const res = await fetch(`${API_URL}/events/${id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -56,9 +52,23 @@ const handleSubmit = async (event, router) => {
   router.push(`/events/${evt.slug}`)
 }
 
-function Add() {
+function EditEventPage({ evt }) {
   const router = useRouter()
+  const initialState = {
+    name: evt.name,
+    description: evt.description,
+    venue: evt.venue,
+    time: evt.time,
+    date: evt.date,
+    performers: evt.performers,
+    address: evt.address,
+  }
+
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [imagePreview, setImagePreview] = useState(
+    evt.image?.formats.thumbnail.url
+  )
+  console.log(evt)
   return (
     <Layout title='Add New Event'>
       <Link href='/events'>Go Back</Link>
@@ -137,8 +147,36 @@ function Add() {
         </div>
         <input type='submit' value='Add Event' className='btn' />
       </form>
+      {imagePreview ? (
+        <div>
+          <p>image uploaded</p>
+          <Image
+            alt='event image'
+            src={imagePreview}
+            width={170}
+            height={100}
+          />
+        </div>
+      ) : (
+        <div>
+          <p>No image uploaded</p>
+        </div>
+      )}
+      <button className='btn-secondary'>
+        <FaImage /> upload image
+      </button>
     </Layout>
   )
 }
 
-export default Add
+export async function getServerSideProps({ params: { id } }) {
+  const evt = await (await fetch(`${API_URL}/events/${id}`)).json()
+
+  return {
+    props: {
+      evt,
+    },
+  }
+}
+
+export default EditEventPage
