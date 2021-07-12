@@ -4,12 +4,25 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FaPencilAlt, FaTimes } from 'react-icons/fa'
 import { API_URL } from '@/config/index'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { useRouter } from 'next/router'
 
-const deleteEvent = e => {
-  console.log('delete event')
+const deleteEvent = async evt => {
+  const res = await fetch(`${API_URL}/events/${evt.id}`, {
+    method: 'DELETE',
+  })
+
+  if (!res.ok) {
+    toast.error('Unable to Delete')
+    return
+  }
+
+  router.push('/events')
 }
 
 function Event({ evt }) {
+  const router = useRouter()
   return (
     <Layout>
       <div className={styles.event}>
@@ -19,7 +32,7 @@ function Event({ evt }) {
               <FaPencilAlt /> Edit Event
             </a>
           </Link>
-          <a className={styles.delete} onClick={deleteEvent}>
+          <a className={styles.delete} onClick={() => deleteEvent(evt)}>
             <FaTimes /> DeleteEvent
           </a>
         </div>
