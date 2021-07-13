@@ -1,4 +1,5 @@
 const { API_URL } = require('@/config/index')
+import cookie from 'cookie'
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -30,6 +31,16 @@ module.exports = async (req, res) => {
     })
   }
 
+  res.setHeader(
+    'Set-Cookie',
+    cookie.serialize('token', user.jwt, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 7 * 24,
+      path: '/',
+    })
+  )
   res.status(200).json({
     status: 'success',
     user,

@@ -3,6 +3,7 @@ import styles from '@/styles/header.module.css'
 import Search from './Search'
 import { useContext } from 'react'
 import { AuthContext } from '@/context/Auth'
+import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
 
 function Header() {
   const { user } = useContext(AuthContext)
@@ -26,8 +27,10 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link href='/login'>
-                <a>Log In</a>
+              <Link href='/accounts/login'>
+                <a className='btn btn-secondary'>
+                  <FaSignInAlt /> Log In
+                </a>
               </Link>
             </li>
           </ul>
@@ -45,8 +48,10 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link href='/logout'>
-                <a>Logout</a>
+              <Link href='/accounts/logout'>
+                <a className='btn btn-secondary'>
+                  <FaSignOutAlt /> Logout
+                </a>
               </Link>
             </li>
           </ul>
