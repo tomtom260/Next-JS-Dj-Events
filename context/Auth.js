@@ -3,8 +3,9 @@ import { useState, createContext } from 'react'
 export function AuthProvider({ children }) {
   const [user, setUser] = useState({})
 
-  const login = user => {
+  const login = async user => {
     setUser(user)
+    
   }
 
   const logout = user => {
