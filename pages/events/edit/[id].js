@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import { API_URL } from '@/config/index'
 import Image from 'next/image'
 import { FaImage } from 'react-icons/fa'
+import Modal from '@/components/Modal'
+import UploadImage from '@/components/UploadImage'
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -65,10 +67,10 @@ function EditEventPage({ evt }) {
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [showModal, setShowModal] = useState(false)
   const [imagePreview, setImagePreview] = useState(
     evt.image?.formats.thumbnail.url
   )
-  console.log(evt)
   return (
     <Layout title='Add New Event'>
       <Link href='/events'>Go Back</Link>
@@ -162,7 +164,16 @@ function EditEventPage({ evt }) {
           <p>No image uploaded</p>
         </div>
       )}
-      <button className='btn-secondary'>
+
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <UploadImage
+          id={evt.id}
+          closeModal={() => setShowModal(false)}
+          setPreview={setImagePreview}
+        />
+      </Modal>
+
+      <button onClick={() => setShowModal(true)} className='btn-secondary'>
         <FaImage /> upload image
       </button>
     </Layout>
