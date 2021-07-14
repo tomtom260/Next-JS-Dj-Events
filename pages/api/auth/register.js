@@ -6,43 +6,45 @@ module.exports = async (req, res) => {
     res.setHeader('Allow', ['POST'])
     return res.status(405).json({
       status: 'fail',
-      message: `Invalid Http Method ${req.method}`,
+      message: `Access Method ${req.method} not allowed`,
     })
   }
 
-  const { password, email: identifier } = req.body
-  const strapiRes = await fetch(`${API_URL}/auth/local`, {
+  const { email, username, password } = req.body
+
+  const strapiRes = await fetch(`${API_URL}/auth/local/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      identifier,
+      email,
+      username,
       password,
     }),
   })
-
-  const user = await strapiRes.json()
+  const newUser = await strapiRes.json()
 
   if (!strapiRes.ok) {
     return res.status(400).json({
       status: 'fail',
-      message: user.data[0].messages[0].message,
+      message: newUser.message[0].messages[0].message,
     })
   }
 
   res.setHeader(
     'Set-Cookie',
-    cookie.serialize('token', user.jwt, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
+    cookie.serialize('token', newUser.jwt, {
       sameSite: 'lax',
+      httpOnly: 'true',
+      strict: process.env.NODE_ENV !== 'development',
       maxAge: 60 * 60 * 7 * 24,
       path: '/',
     })
   )
+
   res.status(200).json({
     status: 'success',
-    user,
+    newUser: newUser.user,
   })
 }

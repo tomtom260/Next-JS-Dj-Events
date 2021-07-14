@@ -72,7 +72,11 @@ function AuthForm({ formItems, handleSubmit }) {
               </div>
             )
           })}
-          <input type='submit' className='btn' value='Login' />
+          <input
+            type='submit'
+            className='btn'
+            value={path === 'register' ? 'Register' : 'Login'}
+          />
         </>
       </form>
     </div>

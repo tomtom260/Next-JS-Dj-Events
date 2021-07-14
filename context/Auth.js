@@ -57,8 +57,28 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const register = user => {
-    console.log('registering...', user)
+  const register = async ({ email, password, username }, setError) => {
+    const res = await fetch(`${FRONTEND_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        username,
+        password,
+      }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(data.message)
+    } else {
+      setUser(data.newUser)
+    }
+
+    return res.ok
   }
 
   return (

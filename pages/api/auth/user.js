@@ -1,5 +1,5 @@
-import { API_URL } from '@/config/index'
-import cookie from 'cookie'
+const { API_URL } = require('@/config/index')
+const cookie = require('cookie')
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {

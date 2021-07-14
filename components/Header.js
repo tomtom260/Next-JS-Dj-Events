@@ -24,7 +24,7 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link href='/register'>
+              <Link href='/accounts/register'>
                 <a>Register</a>
               </Link>
             </li>
