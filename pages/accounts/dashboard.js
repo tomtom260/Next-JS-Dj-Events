@@ -1,5 +1,7 @@
+import Layout from '@/components/Layout'
+
 function Dashboard() {
-  return <div>Dashboard</div>
+  return <Layout>Dashboard</Layout>
 }
 
 export default Dashboard

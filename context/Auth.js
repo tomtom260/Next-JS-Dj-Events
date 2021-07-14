@@ -1,10 +1,14 @@
-import { useState, createContext } from 'react'
-import { FRONTEND_URL } from '../config'
+import { useState, createContext, useEffect, useCallback } from 'react'
+import { FRONTEND_URL } from '@/config/index'
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState({})
 
-  const login = async ({ email, password }, setError) => {
+  useEffect(() => {
+    checkIfLoggedIn()
+  }, [])
+
+  const login = useCallback(async ({ email, password }, setError) => {
     const res = await fetch(`${FRONTEND_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
@@ -19,17 +23,38 @@ export function AuthProvider({ children }) {
     const data = await res.json()
 
     if (!res.ok) {
-      return setError(data.message)
+      setError(data.message)
+    } else {
+      setUser(data.user.user)
     }
-    setUser(data.user.user)
+
+    return res.ok
+  }, [])
+
+  const logout = async () => {
+    const res = await fetch(`${FRONTEND_URL}/api/auth/logout`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (res.ok) {
+      setUser({})
+    }
+    return res.ok
   }
 
-  const logout = user => {
-    setUser(null)
-  }
-
-  const checkIfLoggedIn = () => {
-    console.log('checking...')
+  const checkIfLoggedIn = async () => {
+    const res = await fetch(`${FRONTEND_URL}/api/auth/user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (res.ok) {
+      const user = await res.json()
+      setUser(user)
+    }
   }
 
   const register = user => {

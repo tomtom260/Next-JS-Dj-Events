@@ -4,9 +4,11 @@ import Search from './Search'
 import { useContext } from 'react'
 import { AuthContext } from '@/context/Auth'
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa'
+import { useRouter } from 'next/router'
 
 function Header() {
-  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const { user, logout } = useContext(AuthContext)
   return (
     <div className={styles.header}>
       <div className={styles.logo}>
@@ -48,11 +50,15 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link href='/accounts/logout'>
-                <a className='btn btn-secondary'>
-                  <FaSignOutAlt /> Logout
-                </a>
-              </Link>
+              <a
+                onClick={async e => {
+                  e.preventDefault()
+                  if (await logout()) router.push('/')
+                }}
+                className='btn btn-secondary'
+              >
+                <FaSignOutAlt /> Logout
+              </a>
             </li>
           </ul>
         )}

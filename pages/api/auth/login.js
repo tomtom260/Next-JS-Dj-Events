@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
     return res.status(405).json({
-      status: 'error',
+      status: 'fail',
       message: `Invalid Http Method ${req.method}`,
     })
   }

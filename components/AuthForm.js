@@ -34,7 +34,12 @@ const inputType = item => {
 function AuthForm({ formItems, handleSubmit }) {
   const router = useRouter()
 
-  const [state, dispatch] = useReducer(reducer, {})
+  const initialState = {}
+  formItems.forEach(item => {
+    initialState[item] = ''
+  })
+
+  const [state, dispatch] = useReducer(reducer, initialState)
   let path
   router.pathname.includes('login') ? (path = 'login') : (path = 'register')
 
