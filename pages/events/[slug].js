@@ -70,23 +70,34 @@ function Event({ evt }) {
 
 export default Event
 
-export async function getStaticPaths() {
-  const paths = (await (await fetch(`${API_URL}/events`)).json()).map(evt => ({
-    params: { slug: evt.slug },
-  }))
-  return {
-    paths,
-    fallback: false,
-  }
-}
+export async function getServerSideProps({ query: { slug } }) {
+  const res = await fetch(`${API_URL}/events?slug=${slug}`)
+  const events = await res.json()
 
-export async function getStaticProps({ params: { slug } }) {
-  const { 0: evt } = await (
-    await fetch(`${API_URL}/events?slug=${slug}`)
-  ).json()
   return {
     props: {
-      evt,
+      evt: events[0],
     },
   }
 }
+
+// export async function getStaticPaths() {
+//   const paths = (await (await fetch(`${API_URL}/events`)).json()).map(evt => ({
+//     params: { slug: evt.slug },
+//   }))
+//   return {
+//     paths,
+//     fallback: false,
+//   }
+// }
+
+// export async function getStaticProps({ params: { slug } }) {
+//   const { 0: evt } = await (
+//     await fetch(`${API_URL}/events?slug=${slug}`)
+//   ).json()
+//   return {
+//     props: {
+//       evt,
+//     },
+//   }
+// }

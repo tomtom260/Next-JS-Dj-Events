@@ -4,6 +4,7 @@ const cookie = require('cookie')
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET'])
+    res.setHeader('Access-Control-Allow-Origin', '*')
     return res.status(405).json({
       status: 'fail',
       message: `Invalid Http Method ${req.method}`,
